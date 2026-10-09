@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>سِجل | نظام إدارة الأشخاص والبلاغات</title>
+<style>
+:root{
+  --bg:#06111d;--panel:#0b1c2d;--panel2:#102840;--line:#23425e;
+  --text:#eef7ff;--muted:#9db3c7;--gold:#d7b56d;--blue:#2f8cff;
+  --green:#22b573;--red:#e45555;--amber:#e6a93b;--shadow:0 18px 55px #0008
+}
+*{box-sizing:border-box}body{margin:0;background:
+radial-gradient(circle at 20% 0%,#15385a55,transparent 32rem),
+radial-gradient(circle at 100% 70%,#174d5a33,transparent 28rem),var(--bg);
+color:var(--text);font-family:system-ui,-apple-system,"Noto Sans Arabic",Tahoma,sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{min-height:100vh;display:grid;grid-template-columns:260px 1fr}
+.sidebar{position:sticky;top:0;height:100vh;padding:22px 16px;border-left:1px solid var(--line);
+background:linear-gradient(180deg,#071827ee,#081522f5);backdrop-filter:blur(16px)}
+.brand{text-align:center;padding:8px 0 24px;border-bottom:1px solid var(--line)}
+.emblem{width:66px;height:66px;margin:auto;border:1px solid #d7b56d88;border-radius:50%;
+display:grid;place-items:center;font-size:31px;background:linear-gradient(145deg,#183b5c,#071321);
+box-shadow:0 0 35px #2f8cff22}
+.brand h1{margin:10px 0 2px;font-size:27px}.brand small{color:var(--muted)}
+.nav{display:grid;gap:8px;margin-top:20px}.nav button{border:0;color:#cbd9e6;background:transparent;
+padding:13px 14px;border-radius:13px;text-align:right}.nav button:hover,.nav button.active{background:#173552;color:#fff}
+.nav b{font-size:18px;margin-left:9px}.sidefoot{position:absolute;bottom:20px;right:16px;left:16px;text-align:center;color:#7f99ad;font-size:11px;line-height:1.7}
+.main{min-width:0}.top{height:76px;padding:0 28px;border-bottom:1px solid var(--line);display:flex;align-items:center;
+justify-content:space-between;background:#071522aa;backdrop-filter:blur(14px);position:sticky;top:0;z-index:10}
+.top .title{font-weight:800;font-size:19px}.user{display:flex;align-items:center;gap:10px;color:#c6d8e7;font-size:13px}
+.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#173b5d;border:1px solid #2f8cff66}
+.content{padding:28px;max-width:1450px;margin:auto}.view{display:none}.view.active{display:block}
+.hero{border:1px solid var(--line);border-radius:24px;padding:28px;background:
+linear-gradient(115deg,#102c46,#0a1a2a 55%,#0a2030);box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;left:-70px;bottom:-90px;width:280px;height:280px;border:1px solid #d7b56d33;border-radius:50%;
+box-shadow:0 0 0 28px #d7b56d08,0 0 0 58px #d7b56d05}
+.kicker{color:var(--gold);font-weight:800;letter-spacing:.5px}.hero h2{font-size:30px;margin:8px 0}.hero p{color:var(--muted);margin:0;max-width:700px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}.card{background:linear-gradient(145deg,#0d2236,#091826);
+border:1px solid var(--line);border-radius:18px;padding:18px}.stat{display:flex;justify-content:space-between;align-items:center}.stat strong{font-size:30px}.icon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:#173958;color:#75b7ff;font-size:20px}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:26px 0 12px}.sectionhead h3{margin:0}
+.btn{border:1px solid #2f8cff66;background:#1675e8;color:#fff;padding:11px 15px;border-radius:11px;font-weight:700}
+.btn.secondary{background:#10283e;border-color:var(--line)}.btn.danger{background:#64262b;border-color:#a8464e}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap}.input,.select,.textarea{width:100%;background:#081827;border:1px solid #294a65;color:#eef7ff;
+border-radius:11px;padding:12px;outline:none}.input:focus,.select:focus,.textarea:focus{border-color:#2f8cff;box-shadow:0 0 0 3px #2f8cff18}
+.search{flex:1;min-width:220px}.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:16px;background:#091827}
+table{width:100%;border-collapse:collapse;min-width:700px}th,td{padding:13px 14px;border-bottom:1px solid #18344b;text-align:right}
+th{color:#a9bfd1;background:#0c2032;font-size:13px}td{font-size:14px}tr:hover td{background:#0e2438}.badge{display:inline-block;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800;background:#18384f;color:#a9d1ef}
+.badge.green{background:#123c2c;color:#67e0a5}.badge.red{background:#4a2027;color:#ff9199}.badge.amber{background:#493a1c;color:#f1c36c}
+.empty{text-align:center;padding:45px;color:var(--muted)}
+.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.field label{display:block;margin:0 0 7px;color:#b9cbd9;font-size:13px}
+.full{grid-column:1/-1}.actions{display:flex;gap:10px;justify-content:flex-start;margin-top:18px}.photozone{border:1px dashed #3d6585;border-radius:16px;padding:20px;text-align:center;color:var(--muted)}
+.profile{display:grid;grid-template-columns:250px 1fr;gap:18px}.portrait{min-height:280px;border-radius:20px;border:1px solid var(--line);background:#0b1d2e;display:grid;place-items:center;overflow:hidden}
+.portrait img{width:100%;height:100%;object-fit:cover}.profileinfo{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.kv{background:#0a1b2b;border:1px solid #18364d;border-radius:13px;padding:12px}.kv span{display:block;color:#849caf;font-size:11px;margin-bottom:5px}.kv b{font-size:14px}
+.gallery{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.thumb{aspect-ratio:1;border-radius:12px;overflow:hidden;background:#10273a;border:1px solid var(--line)}.thumb img{width:100%;height:100%;object-fit:cover}
+.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:
+linear-gradient(#06111dcc,#06111dcc),radial-gradient(circle at 50% 20%,#174a6b,#06111d 55%)}
+.loginbox{width:min(440px,100%);background:#081a2aee;border:1px solid #2a4a63;border-radius:25px;padding:30px;box-shadow:var(--shadow)}
+.loginbox .emblem{margin-bottom:14px}.loginbox h1{text-align:center;margin:0}.loginbox p{text-align:center;color:var(--muted)}
+.alert{padding:12px 14px;border-radius:12px;margin:10px 0;background:#402b12;color:#f0c46c;border:1px solid #6d5224}
+.toast{position:fixed;left:20px;bottom:20px;background:#10283b;border:1px solid #2d5573;padding:13px 16px;border-radius:13px;box-shadow:var(--shadow);display:none;z-index:99}
+.toast.show{display:block}.footer{text-align:center;color:#8198aa;font-size:11px;padding:28px 0 8px}.footer b{color:#d7b56d}
+@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{position:fixed;right:0;left:0;bottom:0;top:auto;height:auto;padding:8px;z-index:50;border-top:1px solid var(--line);border-left:0}.brand,.sidefoot{display:none}.nav{display:flex;justify-content:space-around;margin:0}.nav button{padding:9px;font-size:10px;text-align:center}.nav b{display:block;margin:0;font-size:18px}.top{padding:0 15px}.content{padding:17px 14px 90px}.grid{grid-template-columns:repeat(2,1fr)}.profile{grid-template-columns:1fr}.formgrid,.profileinfo{grid-template-columns:1fr}.gallery{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<div id="login" class="login">
+  <div class="loginbox">
+    <div class="emblem">◈</div>
+    <h1>سِجل</h1>
+    <p>نظام إدارة الأشخاص والبلاغات</p>
+    <div id="loginMsg"></div>
+    <div class="field"><label>البريد الإلكتروني</label><input id="email" class="input" type="email" autocomplete="username"></div>
+    <div class="field" style="margin-top:12px"><label>كلمة المرور</label><input id="password" class="input" type="password" autocomplete="current-password"></div>
+    <button class="btn" style="width:100%;margin-top:16px" onclick="login()">دخول آمن</button>
+    <div class="footer">المساعد شرطة / <b>محمد إبراهيم محمد إبراهيم</b></div>
+  </div>
+</div>
+
+<div id="app" class="app" style="display:none">
+  <aside class="sidebar">
+    <div class="brand"><div class="emblem">◈</div><h1>سِجل</h1><small>إدارة الأشخاص والبلاغات</small></div>
+    <nav class="nav">
+      <button class="active" onclick="showView('home',this)"><b>⌂</b>الرئيسية</button>
+      <button onclick="showView('people',this)"><b>♙</b>الأشخاص</button>
+      <button onclick="showView('reports',this)"><b>▤</b>البلاغات</button>
+      <button onclick="showView('add',this)"><b>＋</b>إضافة شخص</button>
+      <button onclick="logout()"><b>↪</b>خروج</button>
+    </nav>
+    <div class="sidefoot">نظام داخلي لإدارة السجلات<br>المساعد شرطة / محمد إبراهيم محمد إبراهيم</div>
+  </aside>
+  <main class="main">
+    <header class="top"><div class="title" id="pageTitle">لوحة التحكم</div><div class="user"><span id="userEmail">—</span><span class="avatar">م</span></div></header>
+    <section class="content">
+      <div id="home" class="view active">
+        <div class="hero"><div class="kicker">سِجل • إصدار مؤسسي</div><h2>مركز إدارة السجلات</h2><p>واجهة موحّدة للبحث في ملفات الأشخاص وربط البلاغات والصور بالسجل الصحيح، مع تجربة مصممة للهاتف أولًا.</p></div>
+        <div class="grid">
+          <div class="card stat"><div><small>إجمالي الأشخاص</small><br><strong id="statPeople">—</strong></div><div class="icon">♙</div></div>
+          <div class="card stat"><div><small>إجمالي البلاغات</small><br><strong id="statReports">—</strong></div><div class="icon">▤</div></div>
+          <div class="card stat"><div><small>حالة النظام</small><br><strong style="font-size:18px;color:#62dca0">متصل</strong></div><div class="icon">✓</div></div>
+          <div class="card stat"><div><small>البحث</small><br><strong style="font-size:18px">سريع</strong></div><div class="icon">⌕</div></div>
+        </div>
+        <div class="sectionhead"><h3>آخر الأشخاص</h3><button class="btn secondary" onclick="showView('people')">عرض الكل</button></div>
+        <div id="recentPeople" class="tablewrap"></div>
+      </div>
+
+      <div id="people" class="view">
+        <div class="sectionhead"><h3>ملفات الأشخاص</h3><button class="btn" onclick="showView('add')">＋ إضافة شخص</button></div>
+        <div class="toolbar"><input id="peopleSearch" class="input search" placeholder="ابحث بالاسم أو اللقب أو السكن..." oninput="renderPeople()"><button class="btn secondary" onclick="loadPeople()">↻ تحديث</button></div>
+        <div id="peopleTable" class="tablewrap" style="margin-top:12px"></div>
+      </div>
+
+      <div id="reports" class="view">
+        <div class="sectionhead"><h3>البلاغات</h3><button class="btn secondary" onclick="loadReports()">↻ تحديث</button></div>
+        <div id="reportsTable" class="tablewrap"></div>
+      </div>
+
+      <div id="add" class="view">
+        <div class="sectionhead"><h3>إنشاء ملف شخص</h3></div>
+        <div id="duplicateBox"></div>
+        <div class="card">
+          <div class="formgrid">
+            <div class="field"><label>الاسم الكامل *</label><input id="fullName" class="input" oninput="checkDuplicate()"></div>
+            <div class="field"><label>الأسماء/الألقاب</label><input id="aliases" class="input"></div>
+            <div class="field"><label>محل الإقامة</label><input id="residence" class="input"></div>
+            <div class="field"><label>الهاتف 1</label><input id="phone1" class="input"></div>
+            <div class="field"><label>الهاتف 2</label><input id="phone2" class="input"></div>
+            <div class="field"><label>تاريخ الميلاد</label><input id="birthDate" class="input" placeholder="مثال: 1995/01/20"></div>
+            <div class="field full"><label>ملاحظات</label><textarea id="notes" class="textarea" rows="4"></textarea></div>
+            <div class="field full"><label>الصورة</label><div class="photozone"><input id="photo" type="file" accept="image/*"><br><small>الصورة تُرفع إلى Bucket الخاص بالتطبيق، وليست إلى قاعدة البيانات.</small></div></div>
+          </div>
+          <div class="actions"><button class="btn" onclick="createPerson()">حفظ الملف</button><button class="btn secondary" onclick="clearAdd()">مسح</button></div>
+        </div>
+      </div>
+
+      <div id="profile" class="view">
+        <div class="sectionhead"><button class="btn secondary" onclick="showView('people')">← رجوع</button><h3 id="profileTitle">ملف الشخص</h3></div>
+        <div id="profileBody"></div>
+      </div>
+
+      <div class="footer">سِجل — نظام إدارة الأشخاص والبلاغات<br><b>المساعد شرطة / محمد إبراهيم محمد إبراهيم</b></div>
+    </section>
+  </main>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+const CFG={
+ endpoint:"https://fra.cloud.appwrite.io/v1",
+ project:"6abc4f0c00115b9ddb5e",
+ database:"6abe996b0028f4e0b705",
+ people:"people", reports:"reports", bucket:"person-photos"
+};
+const H=()=>({"X-Appwrite-Project":CFG.project,"Content-Type":"application/json"});
+let people=[],reports=[],currentPerson=null;
+
+async function api(path,opt={}){
+  const r=await fetch(CFG.endpoint+path,{credentials:"include",...opt,headers:{...H(),...(opt.headers||{})}});
+  if(!r.ok){let e={};try{e=await r.json()}catch{};throw new Error(e.message||("HTTP "+r.status))}
+  return r.status===204?{}:r.json();
+}
+async function session(){
+  try{const u=await api("/account"); document.getElementById("userEmail").textContent=u.email||u.name||"مستخدم";return true}catch{return false}
+}
+async function login(){
+  const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;
+  if(!email||!password)return msg("أدخل البريد وكلمة المرور.");
+  try{
+    await api("/account/sessions/email",{method:"POST",body:JSON.stringify({email,password})});
+    boot();
+  }catch(e){msg(e.message)}
+}
+function msg(t){document.getElementById("loginMsg").innerHTML='<div class="alert">'+esc(t)+'</div>'}
+async function logout(){try{await api("/account/sessions/current",{method:"DELETE"});}catch{} location.reload()}
+async function boot(){
+  document.getElementById("login").style.display="none";document.getElementById("app").style.display="grid";
+  await loadAll();
+}
+async function loadAll(){await Promise.all([loadPeople(),loadReports()]);}
+async function loadPeople(){
+  try{const d=await api(`/databases/${CFG.database}/tables/${CFG.people}/rows?queries[]=${encodeURIComponent(JSON.stringify(["limit",100]))}`);
+    people=d.rows||[];renderPeople();renderRecent();document.getElementById("statPeople").textContent=d.total??people.length;
+  }catch(e){toast("تعذر تحميل الأشخاص: "+e.message)}
+}
+async function loadReports(){
+  try{const d=await api(`/databases/${CFG.database}/tables/${CFG.reports}/rows?queries[]=${encodeURIComponent(JSON.stringify(["limit",100]))}`);
+    reports=d.rows||[];renderReports();document.getElementById("statReports").textContent=d.total??reports.length;
+  }catch(e){toast("تعذر تحميل البلاغات: "+e.message)}
+}
+function renderPeople(){
+ const q=(document.getElementById("peopleSearch")?.value||"").trim().toLowerCase();
+ const arr=people.filter(p=>[p.fullName,p.aliases,p.residence,p.phone1,p.phone2].join(" ").toLowerCase().includes(q));
+ const box=document.getElementById("peopleTable"); if(!box)return;
+ if(!arr.length){box.innerHTML='<div class="empty">لا توجد سجلات مطابقة.</div>';return}
+ box.innerHTML=`<table><thead><tr><th>الاسم</th><th>الألقاب</th><th>الإقامة</th><th>الهاتف</th><th>إجراء</th></tr></thead><tbody>`+
+ arr.map(p=>`<tr><td><b>${esc(p.fullName||"—")}</b></td><td>${esc(p.aliases||"—")}</td><td>${esc(p.residence||"—")}</td><td>${esc(p.phone1||"—")}</td><td><button class="btn secondary" onclick="openPerson('${escAttr(p.$id)}')">فتح الملف</button></td></tr>`).join("")+
+ `</tbody></table>`;
+}
+function renderRecent(){
+ const box=document.getElementById("recentPeople");if(!box)return;
+ const arr=people.slice(0,5);if(!arr.length){box.innerHTML='<div class="empty">لا توجد سجلات بعد.</div>';return}
+ box.innerHTML=`<table><thead><tr><th>الاسم</th><th>الإقامة</th><th>الهاتف</th><th></th></tr></thead><tbody>`+
+ arr.map(p=>`<tr><td>${esc(p.fullName||"—")}</td><td>${esc(p.residence||"—")}</td><td>${esc(p.phone1||"—")}</td><td><button class="btn secondary" onclick="openPerson('${escAttr(p.$id)}')">فتح</button></td></tr>`).join("")+
+ `</tbody></table>`;
+}
+function renderReports(){
+ const box=document.getElementById("reportsTable");if(!box)return;
+ if(!reports.length){box.innerHTML='<div class="empty">لا توجد بلاغات مسجلة.</div>';return}
+ box.innerHTML=`<table><thead><tr><th>رقم البلاغ</th><th>الشخص</th><th>المحطة</th><th>النوع</th><th>التاريخ</th><th>الحالة</th></tr></thead><tbody>`+
+ reports.map(r=>{let p=people.find(x=>x.$id===r.personId);return `<tr><td>${esc(r.reportNumber||"—")}</td><td>${esc(p?.fullName||"غير معروف")}</td><td>${esc(r.station||"—")}</td><td>${esc(r.crimeType||"—")}</td><td>${esc(r.reportDate||"—")}</td><td><span class="badge">${esc(r.status||"غير محدد")}</span></td></tr>`}).join("")+
+ `</tbody></table>`;
+}
+function checkDuplicate(){
+ const n=document.getElementById("fullName").value.trim().toLowerCase(),box=document.getElementById("duplicateBox");
+ if(n.length<2){box.innerHTML="";return}
+ const matches=people.filter(p=>String(p.fullName||"").toLowerCase().includes(n)||String(p.aliases||"").toLowerCase().includes(n));
+ box.innerHTML=matches.length?'<div class="alert">تنبيه: توجد سجلات مشابهة. راجعها قبل إنشاء ملف جديد: '+matches.map(p=>`<button class="btn secondary" style="margin:3px" onclick="openPerson('${escAttr(p.$id)}')">${esc(p.fullName)}</button>`).join("")+'</div>':"";
+}
+async function createPerson(){
+ const fullName=document.getElementById("fullName").value.trim();if(!fullName)return toast("الاسم الكامل مطلوب.");
+ const data={fullName,aliases:v("aliases"),residence:v("residence"),phone1:v("phone1"),phone2:v("phone2"),birthDate:v("birthDate"),notes:v("notes")};
+ try{
+   const row=await api(`/databases/${CFG.database}/tables/${CFG.people}/rows`,{method:"POST",body:JSON.stringify({rowId:"unique()",data})});
+   const file=document.getElementById("photo").files[0];
+   if(file) await uploadPhoto(row.$id,file);
+   toast("تم إنشاء الملف بنجاح");clearAdd();await loadPeople();openPerson(row.$id);
+ }catch(e){toast("لم يتم الحفظ: "+e.message)}
+}
+async function uploadPhoto(personId,file){
+ const fd=new FormData();fd.append("fileId","unique()");fd.append("file",file);
+ fd.append("permissions[]",`read(\"users\")`);
+ const r=await fetch(`${CFG.endpoint}/storage/buckets/${CFG.bucket}/files`,{method:"POST",headers:{"X-Appwrite-Project":CFG.project},credentials:"include",body:fd});
+ if(!r.ok){let e={};try{e=await r.json()}catch{};throw new Error(e.message||"فشل رفع الصورة")}
+ // Note: personId-to-file association can be added later as a dedicated image table if multiple photos are required.
+ return r.json();
+}
+async function openPerson(id){
+ currentPerson=people.find(p=>p.$id===id);if(!currentPerson)return;
+ document.getElementById("profileTitle").textContent=currentPerson.fullName||"ملف الشخص";
+ const rs=reports.filter(r=>r.personId===id);
+ document.getElementById("profileBody").innerHTML=`<div class="profile">
+ <div class="portrait"><div style="text-align:center;color:#8097a9"><div style="font-size:45px">♙</div><small>لا توجد صورة مرتبطة في هذه النسخة</small></div></div>
+ <div class="card"><div class="profileinfo">
+ ${kv("الاسم الكامل",currentPerson.fullName)}${kv("الألقاب",currentPerson.aliases)}${kv("الإقامة",currentPerson.residence)}
+ ${kv("الهاتف 1",currentPerson.phone1)}${kv("الهاتف 2",currentPerson.phone2)}${kv("تاريخ الميلاد",currentPerson.birthDate)}
+ <div class="kv full"><span>ملاحظات</span><b>${esc(currentPerson.notes||"—")}</b></div></div></div></div>
+ <div class="sectionhead"><h3>البلاغات المرتبطة (${rs.length})</h3></div>
+ <div class="tablewrap">${rs.length?`<table><thead><tr><th>الرقم</th><th>المحطة</th><th>النوع</th><th>التاريخ</th><th>الحالة</th></tr></thead><tbody>${rs.map(r=>`<tr><td>${esc(r.reportNumber)}</td><td>${esc(r.station)}</td><td>${esc(r.crimeType)}</td><td>${esc(r.reportDate)}</td><td><span class="badge">${esc(r.status||"—")}</span></td></tr>`).join("")}</tbody></table>`:'<div class="empty">لا توجد بلاغات مرتبطة بهذا الملف.</div>'}</div>`;
+ showView("profile");
+}
+function kv(a,b){return `<div class="kv"><span>${a}</span><b>${esc(b||"—")}</b></div>`}
+function clearAdd(){["fullName","aliases","residence","phone1","phone2","birthDate","notes"].forEach(id=>document.getElementById(id).value="");document.getElementById("photo").value="";document.getElementById("duplicateBox").innerHTML=""}
+function v(id){return document.getElementById(id).value.trim()}
+function showView(id,btn){
+ document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");
+ document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));if(btn)btn.classList.add("active");
+ const titles={home:"لوحة التحكم",people:"ملفات الأشخاص",reports:"البلاغات",add:"إضافة شخص",profile:"ملف الشخص"};document.getElementById("pageTitle").textContent=titles[id]||"سِجل";
+}
+function toast(t){const x=document.getElementById("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),3200)}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function escAttr(s){return esc(s).replace(/`/g,"&#96;")}
+session().then(ok=>ok?boot():null);
+</script>
+</body>
+</html>
